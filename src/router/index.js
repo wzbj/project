@@ -42,6 +42,32 @@ export const StaticRouterMap = [
         component: () => import('@/views/dashboard/index')
       }
     ]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/mytask',
+    name: 'User',
+    meta: { title: '用户审核', icon: 'example' },
+    children: [
+      {
+        path: '/user/mytask',
+        component: () => import('@/views/user/MyTask')
+      }
+    ]
+  },
+  {
+    path: '/user/alluser',
+    component: Layout,
+    redirect: '/user/alluser',
+    name: 'AllUser',
+    meta: { title: '全部用户', icon: 'example' },
+    children: [
+      {
+        path: '/user/alluser',
+        component: () => import('@/views/user/AllUser')
+      }
+    ]
   }
 ]
 

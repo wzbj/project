@@ -53,7 +53,7 @@ export default {
   },
   watch: {
     navMenu(){
-      console.log(this.$route.path)
+      console.log('***navmenu发生变化l.....')
       this.defaultActiveIndex = this.activeIndex(this.$route.path)
       console.log(this.defaultActiveIndex)
     }
@@ -68,9 +68,6 @@ export default {
     }
   },
   created() {
-    console.log(22222222)
-    console.log(this.$route)
-    console.log(22222222)
     console.log(this.navMenu)
   },
   methods:{
