@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, logout, getInfo, wordList } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { StaticRouterMap } from '../../router/index'
 const user = {
@@ -7,7 +7,8 @@ const user = {
     name: '',
     avatar: '',
     roles: [],
-    RouterList: [] // 动态路由
+    RouterList: [], // 动态路由
+    wordList: []
   },
 
   mutations: {
@@ -25,6 +26,9 @@ const user = {
     },
     set_router: (state, RouterList) => {
       state.RouterList = RouterList
+    },
+    SET_WORDLIST: (state, wordList) => {
+      state.wordList = wordList
     }
   },
 
@@ -67,6 +71,21 @@ const user = {
           })
       })
     },
+    // 拉取话术列表wordList
+    WordList({commit}) {
+      return new Promise((resolve, reject) => {
+        wordList()
+          .then(response => {
+            const data = response.data
+            commit('SET_WORDLIST', data)
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+
     // 动态设置路由 此为设置设置途径
     setRouterList({ commit }, routerList) {
       commit('set_router', StaticRouterMap.concat(routerList)) // 进行路由拼接并存储

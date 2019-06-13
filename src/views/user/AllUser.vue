@@ -1,4 +1,4 @@
-<template>
+0<template>
   <div>
     <!-- <h1>我的任务</h1> -->
     <page-msg />
@@ -9,9 +9,11 @@
       <el-col :span="3">
         <el-input v-model="input" placeholder="昵称精准搜索"></el-input>
       </el-col>
-      <el-col :span="3">
-        <!-- <el-input v-model="areacode"></el-input> -->
-        <el-input v-model="input" placeholder="手机号搜索"></el-input>
+      <el-col :span="3" align="left">
+        <!-- <area-input :area_code="areacode" :area_phone="areaphone" :lastMobile="lastMobile" /> -->
+        <area-input :area_phone="areaphone" />
+        <!-- <el-input id="area" class="area" style="width:20%;float:left;" v-model="input" placeholder="区号"></el-input>
+        <el-input v-model="input" style="width:80%;float:left;" placeholder="手机号搜索"></el-input> -->
       </el-col>
       <el-col :span="3">
         <el-input v-model="input" placeholder="用户ID搜索"></el-input>
@@ -60,9 +62,45 @@
         </el-select>
       </el-col>
       <el-col :span="12" align="right">
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
         <el-button type="success" icon="el-icon-refresh">刷新</el-button>
       </el-col>
+    </el-row>
+    <hr>
+    <el-row>
+      <div class="el_radio_wrap">
+        <label class="el_radio_title" for="">性别筛选:</label>
+        <el-radio-group v-model="radio">
+          <el-radio :label="3">全部</el-radio>
+          <el-radio :label="6">男</el-radio>
+          <el-radio :label="9">女</el-radio>
+        </el-radio-group>
+      </div>
+      <div class="el_radio_wrap">
+        <label class="el_radio_title" for="">审核状态:</label>
+        <el-radio-group v-model="radio">
+          <el-radio :label="3">全部</el-radio>
+          <el-radio :label="6">已审核</el-radio>
+          <el-radio :label="9">未审核</el-radio>
+        </el-radio-group>
+      </div>
+      <div class="el_radio_wrap">
+        <label class="el_radio_title" for="">用户状态:</label>
+        <el-radio-group v-model="radio">
+          <el-radio :label="3">全部</el-radio>
+          <el-radio :label="6">正常用户</el-radio>
+          <el-radio :label="9">屏蔽用户</el-radio>
+          <el-radio :label="10">沉底用户</el-radio>
+          <el-radio :label="11">未审核</el-radio>
+        </el-radio-group>
+      </div>
+      <div class="el_radio_wrap">
+        <label class="el_radio_title" for="">时间排序:</label>
+        <el-radio-group v-model="radio">
+          <el-radio :label="3">时间正序</el-radio>
+          <el-radio :label="6">时间倒序</el-radio>
+        </el-radio-group>
+      </div>
     </el-row>
     <hr>
     <el-row>
@@ -77,13 +115,13 @@
         </el-pagination>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary">分配新任务</el-button>
+        <!-- <el-button type="primary">分配新任务</el-button> -->
       </el-col>
       <el-col :span="10" class="right">
-        <el-button type="danger" @click="test">批量屏蔽</el-button>
-        <el-button type="success">批量解封</el-button>
-        <el-button type="danger">批量沉底</el-button>
-        <el-button type="success">批量捞起</el-button>
+        <el-button type="danger" @click="handleBatchShield()">批量屏蔽</el-button>
+        <el-button type="success" @click="handleBatchReleive()">批量解封</el-button>
+        <el-button type="danger" @click="handleBatchSink()">批量沉底</el-button>
+        <el-button type="success" @click="handleBatchReleive()">批量捞起</el-button>
         <el-button type="primary">批量备注</el-button>
       </el-col>
     </el-row>
@@ -214,11 +252,17 @@
         label="操作">
         <template class="testbtn" slot-scope="scope">
           <el-button size="small" type="primary">通过</el-button>
-          <el-button size="small" type="danger" v-if="scope.row.status == '1'">屏蔽</el-button>
-          <el-button size="small" type="danger" v-if="scope.row.status == '1'">沉底</el-button>
-          <el-button size="small" type="success" v-if="scope.row.status == '0'">解封</el-button>
-          <el-button size="small" type="danger" v-if="scope.row.status == '0'">沉底</el-button>
-          <el-button size="small" type="success" v-if="scope.row.status == '2'">海捞</el-button>
+          <el-button size="small" @click="handleShield(scope.$index, scope.row.uid)" type="danger" v-if="scope.row.status == '1'">屏蔽</el-button>
+          <el-button size="small" @click="handleSink(scope.$index, scope.row.uid)" type="danger" v-if="scope.row.status == '1'">沉底</el-button>
+          <el-button size="small" @click="handleReleive(scope.$index, scope.row.uid)" type="success" v-if="scope.row.status == '0'">解封</el-button>
+          <el-button size="small" @click="handleSink(scope.$index, scope.row.uid)" type="danger" v-if="scope.row.status == '0'">沉底</el-button>
+          <el-button size="small" @click="handleReleive(scope.$index, scope.row.uid)" type="success" v-if="scope.row.status == '2'">海捞</el-button>
+          <!-- <status-btn
+            :status="scope.row.status"
+            handleShield="handleShield"
+            handleReleive="handleReleive"
+            handleSink="handleSink"
+            /> -->
           <a href="http://www.baidu.com" target="_blank" rel="noopener noreferrer">
             <el-button type="primary" size="small">日志</el-button>
           </a>
@@ -237,35 +281,63 @@
       layout="prev, pager, next, jumper"
       :total="1000">
     </el-pagination>
+    <DialogShield :dialog='dialog' :formData="formData"></DialogShield>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import PageMsg from '@/components/Page/PageMsg'
+import AreaInput from '@/components/Tool/AreaInput'
+// import StatusBtn from '@/components/Tool/StatusBtn'
+// import DatePicker from '@/components/Tool/DatePicker'
+import DialogShield from './component/DialogShield'
+import { userStaus, genderStatus, osStatus, pickerOptions } from "@/utils/gmu/gmuCommon";
+import { userBatchShield, userBatchReleive, userBatchSink } from "@/utils/gmu/handleUser"
+import { trim } from '@/utils/validate'
 export default {
   name:'MyTask',
   components:{
-    PageMsg
+    PageMsg,
+    AreaInput,
+    DialogShield
+  },
+  computed: {
+    ...mapGetters([
+      'wordList'
+    ])
   },
   data() {
     return {
-      areacode:86,
+      dialog:{
+        show:false,
+        title:"",
+        option:"edit"
+      },
+      formData:{
+        type:"",
+        describe:"",
+        income:"",
+        expend:"",
+        cash:"",
+        remark:"",
+        id:""
+      },
+      factorScreen:{
+        nickname_like:'',
+        nickname:''
+      },
+      lastMobile:'',
+      areacode:'86',
+      areaphone:{
+        area:'86',
+        phone:''
+      },
+      radio:3,
       input1:'',
       input:'',
       currentPage3: 5,
-      userStaus:{
-        '1':'正常',
-        '0':'屏蔽',
-        '2':'沉底'
-      },
-      genderStatus:{
-        '1':'男',
-        '2':'女'
-      },
-      osStatus:{
-        '1':'IOS',
-        '2':'安卓'
-      },
+      checkBoxData:[],//多选选中的项
       option:'',
       options:[
         {id:1,name:'灵魂社交'},
@@ -273,6 +345,9 @@ export default {
         {id:3,name:'释放'},
         {id:4,name:'字母'}
       ],
+      userStaus:userStaus,
+      genderStatus:genderStatus,
+      osStatus:osStatus,
       tags:['追星','唱歌','跳舞','happy','哈哈哈'],
       userList:[{
         uid:11111,
@@ -371,39 +446,21 @@ export default {
         tags:['追星','唱歌','跳舞','happy','哈哈哈'],
         video:'http://images.gmugmu.com//1486114/da4050b35c4bacc25295a537cfe7eb26_0'
       }],
-       pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
-          }
-        }]
-      },
+       pickerOptions: pickerOptions,
       value2: ''
     }
   },
   methods: {
+    mobile() {
+      if(trim(this.areaphone.phone) != ''){
+        this.lastMobile = trim(this.areaphone.area)+trim(this.areaphone.phone)
+      }else{
+        this.lastMobile = ''
+      }
+    },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      console.log(this.wordList)
     },
     changeFun(val) {
       this.checkBoxData = []
@@ -412,23 +469,112 @@ export default {
         })
         console.log(this.checkBoxData.join())
     },
-    test() {
-      console.log(this.input1)
+    handleBatchShield() {//批量用户屏蔽
+      userBatchShield(this.checkBoxData,this.userList);
+    },
+    handleBatchReleive(){//批量用户解封
+      userBatchReleive(this.checkBoxData,this.userList)
+    },
+    handleBatchSink() { //批量用户沉底
+      userBatchSink(this.checkBoxData,this.userList)
     },
     checkNum() {
       console.log(this.option)
       console.log(this.options)
+    },
+    handleShield(index,uid) {
+      this.userList[index].status = 0;
+      this.dialog = {
+        show: true,
+        title:"修改资金信息",
+        option:"edit"
+      };
+      console.log('屏蔽')
+      console.log(index,uid)
+    },
+    handleReleive(index,uid) {
+      this.userList[index].status = 1;
+      console.log(index,uid)
+      console.log('解封');
+    },
+    handleSink(index,uid) {
+      this.userList[index].status = 2;
+      console.log(index,uid)
+      console.log('沉底')
+    },
+    search() {//搜索
+      this.mobile()
+      console.log(this.lastMobile)
+      // console.log(this.phone())
+      // console.log(this.factorScreen)
+    },
+    phone() {
+      // console.log(trim())
+      // if(this.areaphone != ''){
+      //   return trim(this.areacode)+trim(this.areaphone)
+      // }else{
+      //   return ''
+      // }
     }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  .navbar-top{
+    display: none!important;
+  }
+  .area_input{
+    width:100%;
+    .area_code{
+      width:18%;
+      padding:0 5px;
+      text-align: center;
+    }
+    .area_phone{
+      width: 79%;
+    }
+    input{
+      display: inline-block;
+      -webkit-appearance: none;
+      background-color: #fff;
+      background-image: none;
+      border-radius: 4px;
+      border: 1px solid #dcdfe6;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      color: #606266;
+      display: inline-block;
+      font-size: inherit;
+      height: 40px;
+      line-height: 40px;
+      outline: 0;
+      padding: 0 15px;
+    }
+    input::-webkit-input-placeholder {
+
+      /* WebKit browsers */
+
+      color: #bbb;
+
+    }
+  }
+  #area{
+    padding:0;
+  }
   .ipt-search{
     .el-col{
       margin-top: 5px;
       padding-left: 5px;
       padding-right: 5px;
+      #area{
+        padding: 0!important;
+      }
+      .area{
+        #area{
+          padding: 0;
+        }
+      }
     }
   }
   .el-row{

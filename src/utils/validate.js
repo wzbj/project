@@ -10,3 +10,7 @@ export function isvalidUsername(str) {
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
+
+export function trim(s){
+  return s.replace(/(^\s*)|(\s*$)/g, "");
+}

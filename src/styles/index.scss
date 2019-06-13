@@ -76,3 +76,21 @@ a:hover {
 .app-container {
   padding: 20px;
 }
+
+// radio自定义样式修改
+.el_radio_wrap{
+  margin-top:5px;
+  margin-bottom: 5px;
+}
+.el_radio_title{
+  display: inline-block;
+  font-size:12px;
+  color:#000;
+  font-weight:normal;
+  width:80px;
+  padding-left: 10px;
+  text-align: right;
+}
+.el-radio{
+  width: 100px;
+}

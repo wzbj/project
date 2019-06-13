@@ -68,6 +68,32 @@ export const StaticRouterMap = [
         component: () => import('@/views/user/AllUser')
       }
     ]
+  },
+  {
+    path: '/user/userdetail',
+    component: Layout,
+    redirect: '/user/userdetail',
+    name: 'UserDetail',
+    meta: { title: '用户详情', icon: 'example' },
+    children: [
+      {
+        path: '/user/userdetail',
+        component: () => import('@/views/user/UserDetail')
+      }
+    ]
+  },
+  {
+    path: '/ugc/ugcExamine',
+    component: Layout,
+    redirect: '/ugc/ugcExamine',
+    name: 'UserDetail',
+    meta: { title: 'ugc审核', icon: 'example' },
+    children: [
+      {
+        path: '/ugc/ugcExamine',
+        component: () => import('@/views/ugc/ugcExamine')
+      }
+    ]
   }
 ]
 

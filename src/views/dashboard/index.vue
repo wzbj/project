@@ -61,7 +61,10 @@
             align="center"
             label="视频">
             <template slot-scope="scope"> 
-              <video @click="play(scope.row.video)" :src="scope.row.video" style="width:120px;height:60;" />
+              <a style="position:relative;float: left;margin-right: 10px;margin-bottom: 10px;">
+                <video @click="play(scope.row.video)" :src="scope.row.video" style="width:120px;height:60;float:left;" />
+                <img @click="play(scope.row.video)" class="controlIcon" style="position:absolute;top:50%;left:50%;width:20px;height:20px;margin-left:-10px!important;margin-top:-10px!important;" src="@/assets/icon/timg.png" />
+              </a>
             </template>
           </el-table-column>
           <el-table-column
