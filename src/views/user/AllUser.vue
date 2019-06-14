@@ -304,13 +304,14 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'wordList'
+      'wordList',
+      'typeList'
     ])
   },
   data() {
     return {
       dialog:{
-        show:false,
+        show:true,
         title:"",
         option:"edit"
       },
@@ -461,6 +462,7 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       console.log(this.wordList)
+      console.log(this.typeList.length)
     },
     changeFun(val) {
       this.checkBoxData = []
@@ -486,7 +488,7 @@ export default {
       this.userList[index].status = 0;
       this.dialog = {
         show: true,
-        title:"修改资金信息",
+        title:"屏蔽",
         option:"edit"
       };
       console.log('屏蔽')

@@ -1,4 +1,4 @@
-import { login, logout, getInfo, wordList } from '@/api/login'
+import { login, logout, getInfo, wordList, typeList } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { StaticRouterMap } from '../../router/index'
 const user = {
@@ -8,6 +8,7 @@ const user = {
     avatar: '',
     roles: [],
     RouterList: [], // 动态路由
+    typeList: [],
     wordList: []
   },
 
@@ -26,6 +27,9 @@ const user = {
     },
     set_router: (state, RouterList) => {
       state.RouterList = RouterList
+    },
+    SET_TYPELIST: (state, typeList) => {
+      state.typeList = typeList
     },
     SET_WORDLIST: (state, wordList) => {
       state.wordList = wordList
@@ -76,8 +80,23 @@ const user = {
       return new Promise((resolve, reject) => {
         wordList()
           .then(response => {
-            const data = response.data
+            const data = response.data.data
             commit('SET_WORDLIST', data)
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+
+    // 拉取屏蔽话术类型
+    TypeList({commit}) {
+      return new Promise((resolve, reject) => {
+        typeList()
+          .then(response => {
+            const data = response.data.data
+            commit('SET_TYPELIST', data)
             resolve(data)
           })
           .catch(error => {

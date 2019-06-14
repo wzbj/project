@@ -1,8 +1,8 @@
 <template>
   <div class="dialog">
     <el-dialog
-      :title="dialog.title"
       :visible.sync="dialog.show"
+      :title="dialog.title"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :modal-append-to-body="false"
@@ -15,15 +15,24 @@
           label-width="120px"
           style="margin:10px;width:auto;"
         >
-          <el-form-item label="收支类型">
-            <el-select v-model="formData.type" placeholder="收支类型">
-              <el-option v-for="(formtype,index) in format_type_list" :key="index
-              " :label="formtype" :value="formtype">
+          <el-form-item label="话术类型">
+            <el-select v-model="talkId" filterable placeholder="话术类型" @change="handleTalk">
+              <el-option v-for="(type,index) in typeList" :key="index
+              " :label="type.name" :value="type.id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="describe" label="收支描述">
-            <el-input type="decribe" v-model="formData.describe"></el-input>
+          <el-form-item label="选择话术">
+            <el-radio
+              v-model="radioWord"
+              v-for="(word, index) in checkWordList"
+              :key="index"
+              :label="word.text"
+            >{{word.text}}
+            </el-radio>
+          </el-form-item>
+          <el-form-item prop="describe" label="给该用户备注(选填)">
+            <el-input type="textarea" :rows="2" v-model="formData.describe" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item prop='income'  label="收入:">
             <el-input type="income" v-model="formData.income"></el-input>
@@ -52,12 +61,25 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'dialogfound',
+  computed: {
+    ...mapGetters([
+      'wordList',
+      'typeList'
+    ])
+    // talkId() {
+    //   return this.$store.getters.typeList[0].id
+    // }
+  },
   data() {
     return {
       tableData:[],
-      
+      // talkId:this.typeList[0].id,
+      talkId:'',
+      radioWord:'',
+      checkWordList:[],//类型下对应的话术
       format_type_list:[
         "提现",
         "提现手续费",
@@ -84,6 +106,9 @@ export default {
     dialog: Object,
     formData: Object
   },
+  created() {
+    this.getFirstTypeid()
+  },
   methods:{
     onSubmit(form){
       console.log(form)
@@ -104,6 +129,17 @@ export default {
             })
         }
       })
+    },
+    handleTalk() {
+      // 选中过滤当前类型下的话术
+      const typeId = this.talkId
+      console.log(typeId)
+      console.log(this.wordList)
+      this.checkWordList=this.wordList.filter(item => item.typeId == typeId)
+      console.log(this.checkWordList)
+    },
+    getFirstTypeid() {
+      // this.talkId = this.typeList[0].id
     }
   }
 }
@@ -111,5 +147,15 @@ export default {
 
 
 <style scoped>
-
+  /* .dialog .el-dialog__body{
+    padding:30px 14px!important;
+  } */
+  .el-radio{
+    display: block;
+    width: 100%;
+    white-space: normal;
+    margin-left: 0;
+    margin-top: 8px;
+    line-height: 20px;
+  }
 </style>

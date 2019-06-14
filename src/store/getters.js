@@ -7,6 +7,7 @@ const getters = {
   routerList: state => state.user.RouterList,
   navMenu: state => state.app.navMenu,
   roles: state => state.user.roles,
+  typeList: state => state.user.typeList,
   wordList: state => state.user.wordList
 }
 export default getters

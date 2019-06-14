@@ -61,6 +61,8 @@ function gotoRouter(to, next) {
       data = true // 记录路由获取状态
       store.dispatch('setRouterList', asyncRouter) // 存储到vuex
       store.dispatch('GetInfo')
+      store.dispatch('WordList')
+      store.dispatch('TypeList')
       next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
     })
     .catch(e => {
