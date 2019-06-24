@@ -8,7 +8,7 @@
       auto-complete="on"
       label-position="left"
     >
-      <h3 class="title">动态路由登录案例</h3>
+      <h3 class="title">审核后台</h3>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user"/>
@@ -45,13 +45,13 @@
           @click.native.prevent="handleLogin"
         >Sign in</el-button>
       </el-form-item>
-      <div class="tips">
+      <div class="tips" style="display:none;">
         <span style="margin-right:20px;">username: admin</span>
         <span style="margin-right:23px;">password: 随意</span>
         <br>
         <span style="margin-right:23px;">admin的与editor渲染的路由不一样,数据来源于 easy-mock</span>
       </div>
-      <div class="tips">
+      <div class="tips" style="display:none;">
         <span style="margin-right:23px;">username: editor</span>
         <span style="margin-right:23px;">password: 随意</span>
       </div>

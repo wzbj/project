@@ -83,6 +83,19 @@ export const StaticRouterMap = [
     ]
   },
   {
+    path: '/ugc/myUgcTask',
+    component: Layout,
+    redirect: '/ugc/myUgcTask',
+    name: 'MyUgcTask',
+    meta: { title: 'UGC审核', icon: 'example' },
+    children: [
+      {
+        path: '/ugc/myUgcTask',
+        component: () => import('@/views/ugc/MyUgcTask')
+      }
+    ]
+  },
+  {
     path: '/ugc/ugcExamine',
     component: Layout,
     redirect: '/ugc/ugcExamine',

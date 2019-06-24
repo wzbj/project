@@ -1,6 +1,11 @@
 <template>
   <div>
     <!-- <h1>我的任务</h1> -->
+    <!-- <div class="parent">
+      <h2>{{ msg }}</h2>
+      <p>父组件接手到的内容：{{ username }}</p>
+      <son psMsg="父传子的内容:叫爸爸" @transfer="getUser"></son>
+    </div> -->
     <page-msg />
     <el-row class="ipt-search">
       <el-col :span="4">
@@ -284,18 +289,22 @@ import AreaInput from '@/components/Tool/AreaInput'
 // import DatePicker from '@/components/Tool/DatePicker'
 import { userStaus, genderStatus, osStatus, pickerOptions } from "@/utils/gmu/gmuCommon";
 import { userBatchShield, userBatchReleive, userBatchSink } from "@/utils/gmu/handleUser"
+import son from './Son'
 import { trim } from '@/utils/validate'
 export default {
   name:'ugcExamine',
   components:{
     PageMsg,
-    AreaInput
+    AreaInput,
+    son
   },
   computed: {
    
   },
   data() {
     return {
+      msg: '父组件',
+        username:'',
       factorScreen:{
         nickname_like:'',
         nickname:''
@@ -436,6 +445,9 @@ export default {
     }
   },
   methods: {
+    getUser(msg){
+        this.username= msg
+      },
     mobile() {
       if(trim(this.areaphone.phone) != ''){
         this.lastMobile = trim(this.areaphone.area)+trim(this.areaphone.phone)
