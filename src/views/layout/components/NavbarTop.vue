@@ -78,16 +78,14 @@ export default {
     const index = this.activeIndex(this.$route);
     this.handleSelect(index)
     const url = window.location.href
-    console.log(111111)
-    console.log(this.$route.fullPath.split('/')[1].split('/')[0])
-    console.log(this.defaultActiveIndex)
-    console.log(this.$route)
-    console.log(111111)
+    // console.log(this.$route.fullPath.split('/')[1].split('/')[0])
+    // console.log(this.defaultActiveIndex)
+    // console.log(this.$route)
     // console.log(this.routerList)
   },
   methods:{
      handleSelect(index) {
-       console.log(index)
+      //  console.log(index)
       this.defaultActiveIndex = index
       const routers = this.routerList // 获取路由对象
       for (var i = 0; i < routers.length; i++) {
@@ -96,7 +94,7 @@ export default {
           this.$store.commit('CHANGE_NAVMENU', routers[i].children)
         }
       }
-      console.log(this.$store.getters.navMenu)
+      // console.log(this.$store.getters.navMenu)
     },
     activeIndex(route){
       return route.fullPath.split('/')[1].split('/')[0] == 'dashboard' ? '/' : '/'+route.fullPath.split('/')[1].split('/')[0]

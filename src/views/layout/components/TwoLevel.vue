@@ -53,9 +53,9 @@ export default {
   },
   watch: {
     navMenu(){
-      console.log('***navmenu发生变化l.....')
+      // console.log('***navmenu发生变化l.....')
       this.defaultActiveIndex = this.activeIndex(this.$route.path)
-      console.log(this.defaultActiveIndex)
+      // console.log(this.defaultActiveIndex)
     }
   },
   computed: {
@@ -68,20 +68,20 @@ export default {
     }
   },
   created() {
-    console.log(this.navMenu)
+    // console.log(this.navMenu)
   },
   methods:{
     handleSelect(index) {
-       console.log(this.$route.path)
+      //  console.log(this.$route.path)
       this.defaultActiveIndex = index
       const routers = this.routerList // 获取路由对象
       for (var i = 0; i < routers.length; i++) {
         if (routers[i].path === index) {
-          console.log(routers[i].children)
+          // console.log(routers[i].children)
           this.$store.commit('CHANGE_NAVMENU', routers[i].children)
         }
       }
-      console.log(this.$store.getters.navMenu)
+      // console.log(this.$store.getters.navMenu)
     },
     activeIndex(route){
       return route.split('/')[2] ? route.split('/')[2] : '/'

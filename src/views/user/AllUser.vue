@@ -294,6 +294,7 @@ import AreaInput from '@/components/Tool/AreaInput'
 import DialogShield from './component/DialogShield'
 import { userStaus, genderStatus, osStatus, pickerOptions } from "@/utils/gmu/gmuCommon";
 import { userBatchShield, userBatchReleive, userBatchSink } from "@/utils/gmu/handleUser"
+import { accountList } from '@/api/user'
 import { trim } from '@/utils/validate'
 export default {
   name:'MyTask',
@@ -311,9 +312,21 @@ export default {
   data() {
     return {
       dialog:{
-        show:true,
+        show:false,
         title:"",
         option:"edit"
+      },
+      accountForm:{
+        "account": " ",
+        "beginTime": " ",
+        "endTime": " ",
+        "gender": " ",
+        "id": "",
+        "ip": "",
+        "limit": 50,
+        "order": 0,
+        "page": 1,
+        "status": ""
       },
       formData:{
         type:"",
@@ -451,7 +464,21 @@ export default {
       value2: ''
     }
   },
+  mounted() {
+    this.getAccountList()
+  },
   methods: {
+    //accountList接口
+    getAccountList() {
+      accountList(this.accountForm)
+        .then(response => {
+          const data = response.data
+          console.log(data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     mobile() {
       if(trim(this.areaphone.phone) != ''){
         this.lastMobile = trim(this.areaphone.area)+trim(this.areaphone.phone)
@@ -460,16 +487,16 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      console.log(this.wordList)
-      console.log(this.typeList.length)
+      // console.log(`当前页: ${val}`);
+      // console.log(this.wordList)
+      // console.log(this.typeList.length)
     },
     changeFun(val) {
       this.checkBoxData = []
         val.filter((item,index) => {
           this.checkBoxData.push(item.uid)
         })
-        console.log(this.checkBoxData.join())
+        // console.log(this.checkBoxData.join())
     },
     handleBatchShield() {//批量用户屏蔽
       userBatchShield(this.checkBoxData,this.userList);
@@ -481,8 +508,8 @@ export default {
       userBatchSink(this.checkBoxData,this.userList)
     },
     checkNum() {
-      console.log(this.option)
-      console.log(this.options)
+      // console.log(this.option)
+      // console.log(this.options)
     },
     handleShield(index,uid) {
       this.userList[index].status = 0;
@@ -491,18 +518,18 @@ export default {
         title:"屏蔽",
         option:"edit"
       };
-      console.log('屏蔽')
-      console.log(index,uid)
+      // console.log('屏蔽')
+      // console.log(index,uid)
     },
     handleReleive(index,uid) {
       this.userList[index].status = 1;
-      console.log(index,uid)
-      console.log('解封');
+      // console.log(index,uid)
+      // console.log('解封');
     },
     handleSink(index,uid) {
       this.userList[index].status = 2;
-      console.log(index,uid)
-      console.log('沉底')
+      // console.log(index,uid)
+      // console.log('沉底')
     },
     search() {//搜索
       this.mobile()

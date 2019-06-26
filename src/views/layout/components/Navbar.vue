@@ -41,7 +41,7 @@ export default {
   },
   created() {
     console.log(this.avatar)
-    console.log(this.sidebar)
+    // console.log(this.sidebar)
   },
   methods: {
     toggleSideBar() {
